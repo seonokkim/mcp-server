@@ -1,118 +1,82 @@
-# MCP Server Example
+# MCP Server Project
 
-This repository contains an implementation of a Model Context Protocol (MCP) server for educational purposes. This code demonstrates how to build a functional MCP server that can integrate with various LLM clients.
+This repository contains an implementation of a Model Context Protocol (MCP) server. This project demonstrates how to build and run a functional MCP server that can integrate with LLM clients like Claude Desktop.
 
-To follow the complete tutorial, please refer to the [YouTube video tutorial](https://youtu.be/Ek8JHgZtmcI).
-
-## What is MCP?
-
-MCP (Model Context Protocol) is an open protocol that standardizes how applications provide context to LLMs. Think of MCP like a USB-C port for AI applications - it provides a standardized way to connect AI models to different data sources and tools.
-
-![MCP Diagram](img/mcp-diagram-bg.png)
-
-### Key Benefits
-
-- A growing list of pre-built integrations that your LLM can directly plug into
-- Flexibility to switch between LLM providers and vendors
-- Best practices for securing your data within your infrastructure
-
-## Architecture Overview
-
-MCP follows a client-server architecture where a host application can connect to multiple servers:
-
-- **MCP Hosts**: Programs like Claude Desktop, IDEs, or AI tools that want to access data through MCP
-- **MCP Clients**: Protocol clients that maintain 1:1 connections with servers
-- **MCP Servers**: Lightweight programs that expose specific capabilities through the standardized Model Context Protocol
-- **Data Sources**: Both local (files, databases) and remote services (APIs) that MCP servers can access
-
-## Core MCP Concepts
-
-MCP servers can provide three main types of capabilities:
-
-- **Resources**: File-like data that can be read by clients (like API responses or file contents)
-- **Tools**: Functions that can be called by the LLM (with user approval)
-- **Prompts**: Pre-written templates that help users accomplish specific tasks
 
 ## System Requirements
 
-- Python 3.10 or higher
-- MCP SDK 1.2.0 or higher
+- Python 3.11 or higher (as specified in `pyproject.toml`)
 - `uv` package manager
+- Dependencies listed in `pyproject.toml` (e.g., `mcp[cli]`, `httpx`, `langchain`)
 
 ## Getting Started
 
-### Installing uv Package Manager
+### 1. Install `uv` Package Manager
 
-On MacOS/Linux:
+If you don't have `uv` installed, you can install it using:
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+Restart your terminal after installation.
 
-Make sure to restart your terminal afterwards to ensure that the `uv` command gets picked up.
+### 2. Project Setup
 
-### Project Setup
-
-1. Create and initialize the project:
+Clone this repository (if you haven't already) and navigate into the project directory:
 ```bash
-# Create a new directory for our project
-uv init mcp-server
-cd mcp-server
+# cd /path/to/your/mcp-server
+```
 
-# Create virtual environment and activate it
+Create a virtual environment and install dependencies:
+```bash
 uv venv
-source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
-
-# Install dependencies
-uv add "mcp[cli]" httpx
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt # Or use uv pip install -e . if setup.py or pyproject.toml is configured for editable install
+# Based on your pyproject.toml, you might also directly use:
+# uv add beautifulsoup4 httpx "mcp[cli]" langchain langchain-community langchain-core chromadb
+# Or more simply if pyproject.toml is complete:
+# uv sync
 ```
+*(Note: Ensure your `pyproject.toml` is complete or you have a `requirements.txt` for `uv pip install -r requirements.txt`. `uv sync` is often preferred if `pyproject.toml` defines all dependencies.)*
 
-2. Create the server implementation file:
-```bash
-touch main.py
-```
+### 3. Running the Server
 
-### Running the Server
-
-1. Start the MCP server:
+To start the MCP server, run:
 ```bash
 uv run main.py
 ```
-
-2. The server will start and be ready to accept connections
+The server will start and be ready to accept connections.
 
 ## Connecting to Claude Desktop
 
-1. Install Claude Desktop from the official website
-2. Configure Claude Desktop to use your MCP server:
+To connect this MCP server to Claude Desktop:
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
-```json
-{
-    "mcpServers": {
-        "mcp-server": {
-            "command": "uv",  # It's better to use the absolute path to the uv command
-            "args": [
-                "--directory",
-                "/ABSOLUTE/PATH/TO/YOUR/mcp-server",
-                "run",
-                "main.py"
-            ]
+1.  Ensure Claude Desktop is installed.
+2.  Edit the Claude Desktop configuration file located at `~/Library/Application Support/Claude/claude_desktop_config.json` (on macOS).
+3.  Add or update the `mcpServers` section:
+
+    ```json
+    {
+        "mcpServers": {
+            "mcp-server": { // You can choose any name
+                "command": "/full/path/to/your/.venv/bin/uv", // Use absolute path to uv in your venv
+                "args": [
+                    "run",
+                    "main.py"
+                ],
+                "dir": "/full/path/to/your/mcp-server" // Absolute path to this project directory
+            }
         }
     }
-}
-```
+    ```
+    **Important:** Replace `/full/path/to/your/...` with the correct absolute paths on your system. Using the `uv` from your project's virtual environment is recommended.
 
-3. Restart Claude Desktop
+4.  Restart Claude Desktop.
 
-## Troubleshooting
 
-If your server isn't being picked up by Claude Desktop:
+## Acknowledgements
 
-1. Check the configuration file path and permissions
-2. Verify the absolute path in the configuration is correct
-3. Ensure uv is properly installed and accessible
-4. Check Claude Desktop logs for any error messages
+This project is inspired by and builds upon the concepts demonstrated in Alejandro AO's `mcp-server-example`. We extend our gratitude to Alejandro for providing a clear and helpful example for the community. You can find his original work here: [https://github.com/alejandro-ao/mcp-server-example](https://github.com/alejandro-ao/mcp-server-example).
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for more details (if one exists).

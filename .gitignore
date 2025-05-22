@@ -48,3 +48,6 @@ ENV/
 .venv
 env.bak
 venv.bak
+
+# Documentation
+documentation/

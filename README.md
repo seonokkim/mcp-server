@@ -2,6 +2,25 @@
 
 This repository contains an implementation of a Model Context Protocol (MCP) server. This project demonstrates how to build and run a functional MCP server that can integrate with LLM clients like Claude Desktop.
 
+## Key Features
+
+This MCP server provides a suite of tools focused on information retrieval and vector database management, primarily leveraging LangChain and ChromaDB:
+
+*   **Targeted Documentation Search**:
+    *   Quickly search the official documentation for popular AI/ML libraries:
+        *   Langchain
+        *   OpenAI
+        *   LlamaIndex
+    *   Retrieves relevant text snippets directly from the documentation sites.
+
+*   **ChromaDB Vector Database Integration**:
+    *   **Setup**: Create and initialize ChromaDB vector stores with your own text data and optional metadata.
+    *   **Persistence**: Option to persist databases to disk for later use or use in-memory stores.
+    *   **Querying**: Perform semantic searches on your ChromaDB instances to find relevant documents based on query similarity.
+    *   **Demonstration**: A built-in demo tool to showcase the setup and query capabilities with sample data.
+
+*   **Powered by LangChain**:
+    *   Utilizes LangChain for core functionalities like document handling, embedding management (using OpenAI Embeddings by default), and vector store interactions.
 
 ## System Requirements
 
@@ -72,10 +91,11 @@ To connect this MCP server to Claude Desktop:
 
 4.  Restart Claude Desktop.
 
-
 ## Acknowledgements
 
-This project is inspired by and builds upon the concepts demonstrated in Alejandro AO's `mcp-server-example`. We extend our gratitude to Alejandro for providing a clear and helpful example for the community. You can find his original work here: [https://github.com/alejandro-ao/mcp-server-example](https://github.com/alejandro-ao/mcp-server-example).
+This project is largely based on the `mcp-server-example` generously provided by Alejandro AO. We have adapted and utilized significant portions of his original work to build this server. We extend our sincere gratitude to Alejandro for his excellent example and for making his code available to the community.
+
+You can find Alejandro AO's original repository here: [https://github.com/alejandro-ao/mcp-server-example](https://github.com/alejandro-ao/mcp-server-example).
 
 ## License
 
